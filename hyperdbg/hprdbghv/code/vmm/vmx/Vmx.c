@@ -416,14 +416,14 @@ VmxVirtualizeCurrentSystem(PVOID GuestStack)
     //
     g_GuestState[ProcessorID].HasLaunched = FALSE;
 
-    //
-    // Execute Vmxoff
-    //
-    __vmx_off();
-
+    // Read errorcode firstly!
     __vmx_vmread(VMCS_VM_INSTRUCTION_ERROR, &ErrorCode);
     LogError("Err, unable to execute VMLAUNCH, status : 0x%llx", ErrorCode);
 
+    //
+    // Then execute Vmxoff
+    //
+    __vmx_off();
     LogError("Err, VMXOFF Executed Successfully but it was because of an error");
 
     return FALSE;
